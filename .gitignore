@@ -1,0 +1,5 @@
+node_modules
+# Keep environment variables out of version control
+.env
+
+estate-elegance-firebase-adminsdk-g0q8n-b0eeb68df6.json

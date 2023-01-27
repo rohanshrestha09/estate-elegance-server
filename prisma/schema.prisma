@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  buyer
+  seller
+  agent
+}
+
+enum PropertyType {
+  house
+  appartment
+  land
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  email      String     @unique
+  phone      String     @unique
+  name       String
+  password   String
+  role       Role
+  image      String?
+  imageName  String?
+  properties Property[]
+}
+
+model Property {
+  id           Int          @id @default(autoincrement())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  address      String
+  description  String?
+  price        Float
+  area         Int
+  image        String?
+  imageName    String?
+  type         PropertyType
+  published    Boolean      @default(false)
+  availability Boolean      @default(true)
+  User         User?        @relation(fields: [userId], references: [id])
+  userId       Int?
+
+  @@fulltext([address])
+}
